@@ -602,6 +602,8 @@ def test_readonly_cannot_perform_app_action(admin_mc, admin_pc, user_mc,
     ns = admin_pc.cluster.client.create_namespace(name=random_str(),
                                                   projectId=project.id)
     remove_resource(ns)
+    longhorn_ns = admin_pc.cluster.client.create_namespace(name='longhorn-system',
+                                                  projectId=project.id)
 
     wait_for_template_to_be_created(admin_mc.client, "library")
 
@@ -616,9 +618,9 @@ def test_readonly_cannot_perform_app_action(admin_mc, admin_pc, user_mc,
 
     app = client.create_app(
         name="app-" + random_str(),
-        externalId="catalog://?catalog=library&template=mysql&version=0.3.7&"
-                   "namespace=cattle-global-data",
-        targetNamespace=ns.name,
+        externalId="catalog://?catalog=library&template=longhorn&version=1.2.6&"
+                   "namespace=longhorn-system",
+        targetNamespace=longhorn_ns.name,
         projectId=project.id
     )
 
@@ -632,6 +634,8 @@ def test_readonly_cannot_perform_app_action(admin_mc, admin_pc, user_mc,
                            revisionId="test")
     assert e.value.error.status == 403
 
+    admin_pc.client.delete(longhorn_ns)
+    time.sleep(60)
 
 def test_member_can_perform_app_action(admin_mc, admin_pc, remove_resource,
                                        user_mc):
@@ -647,6 +651,10 @@ def test_member_can_perform_app_action(admin_mc, admin_pc, remove_resource,
                                                   projectId=project.id)
     remove_resource(ns)
 
+    longhorn_ns = admin_pc.cluster.client.create_namespace(name='longhorn-system',
+                                                  projectId=project.id)
+    remove_resource(longhorn_ns)                                    
+
     wait_for_template_to_be_created(admin_mc.client, "library")
 
     prtb = pandaria_create_project_role_template_binding(
@@ -661,9 +669,9 @@ def test_member_can_perform_app_action(admin_mc, admin_pc, remove_resource,
     app = client.create_app(
         name="test-" + random_str(),
         externalId="catalog://?catalog=library&template"
-                   "=mysql&version=1.3.1&"
-                   "namespace=cattle-global-data",
-        targetNamespace=ns.name,
+                   "=longhorn&version=1.2.6&"
+                   "namespace=longhorn-system",
+        targetNamespace=longhorn_ns.name,
         projectId=project.id
     )
 

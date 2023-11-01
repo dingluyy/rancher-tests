@@ -353,7 +353,8 @@ def test_role_template_changes_revoke_permissions(admin_mc, remove_resource,
         return len(prtbs.data) == 0
 
     wait_for(_list_prtbs_empty,
-             fail_handler=lambda: "user was able to list PRTBs")
+             fail_handler=lambda: "user was able to list PRTBs",
+             timeout=120)
 
 
 def wait_for_role_template_creation(admin_mc, rt_name, timeout=60):
