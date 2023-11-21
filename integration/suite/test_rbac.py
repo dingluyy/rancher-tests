@@ -603,7 +603,7 @@ def test_readonly_cannot_perform_app_action(admin_mc, admin_pc, user_mc,
                                                   projectId=project.id)
     remove_resource(ns)
     longhorn_ns = admin_pc.cluster.client.create_namespace(name='longhorn-system',
-                                                  projectId=project.id)
+                                                           projectId=project.id)
 
     wait_for_template_to_be_created(admin_mc.client, "library")
 
@@ -653,7 +653,7 @@ def test_member_can_perform_app_action(admin_mc, admin_pc, remove_resource,
 
     longhorn_ns = admin_pc.cluster.client.create_namespace(name='longhorn-system',
                                                   projectId=project.id)
-    remove_resource(longhorn_ns)                                    
+    remove_resource(longhorn_ns)
 
     wait_for_template_to_be_created(admin_mc.client, "library")
 

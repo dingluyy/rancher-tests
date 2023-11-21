@@ -188,9 +188,9 @@ def test_catalog_refresh(admin_mc):
     """Test that on refresh the response includes the names of the catalogs
     that are being refreshed"""
     client = admin_mc.client
-    catalog = client.by_id_catalog("library")
+    catalog = client.by_id_catalog("system-library")
     out = client.action(obj=catalog, action_name="refresh")
-    assert out['catalogs'][0] == "library"
+    assert out['catalogs'][0] == "system-library"
 
     catalogs = client.list_catalog()
     out = client.action(obj=catalogs, action_name="refresh")
@@ -314,9 +314,9 @@ def test_refresh_catalog_access(admin_mc, user_mc):
     """Tests that a user with standard access is not
     able to refresh a catalog.
     """
-    catalog = admin_mc.client.by_id_catalog("library")
+    catalog = admin_mc.client.by_id_catalog("system-library")
     out = admin_mc.client.action(obj=catalog, action_name="refresh")
-    assert out['catalogs'][0] == "library"
+    assert out['catalogs'][0] == "system-library"
     # use catalog obj from admin client to get action not available to user
     with pytest.raises(ApiError) as e:
         user_mc.client.action(obj=catalog, action_name="refresh")

@@ -60,6 +60,7 @@ def mock_receiver_alert():
     yield server
     server.shutdown_server()
 
+
 @pytest.mark.skip(reason="TODO: can not send to mock server")
 def test_add_notifier(admin_mc, remove_resource, mock_receiver_alert):
     client = admin_mc.client
