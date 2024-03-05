@@ -37,13 +37,16 @@ def get_ip():
         s.close()
     return IP
 
-SERVER_URL = 'https://xxx'
+
+IP = get_ip()
+SERVER_URL = os.environ.get('CATTLE_TEST_URL', 'https://' + IP + ':8443')
+SERVER_PASSWORD = os.environ.get('RANCHER_SERVER_PASSWORD', 'admin')
 BASE_URL = SERVER_URL + '/v3'
 AUTH_URL = BASE_URL + '-public/localproviders/local?action=login'
 DEFAULT_TIMEOUT = 120
 DEFAULT_CATALOG = "https://github.com/rancher/integration-test-charts"
 WAIT_HTTP_ERROR_CODES = [404, 405]
-SERVER_PASSWORD = ''
+
 
 class ManagementContext:
     """Contains a client that is scoped to the managment plane APIs. That is,
@@ -550,6 +553,7 @@ def kubernetes_api_client(rancher_client, cluster_name):
     kc = c.generateKubeconfig()
     loader = KubeConfigLoader(config_dict=yaml.full_load(kc.config))
     client_configuration = type.__call__(Configuration)
+    client_configuration.verify_ssl=False
     loader.load_and_set(client_configuration)
     k8s_client = ApiClient(configuration=client_configuration)
     return k8s_client
