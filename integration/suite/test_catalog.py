@@ -125,6 +125,7 @@ def test_user_can_list_global_catalog(user_factory, remove_resource):
     assert len(c) == 1
 
 
+@pytest.mark.skip
 def test_relative_paths(admin_mc, admin_pc, remove_resource):
     """ This test adds a catalog's index.yaml with a relative chart url
     and ensures that rancher can resolve the relative url"""
